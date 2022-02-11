@@ -53,6 +53,8 @@ function saveFrontendFiles(nFTCrowdsale, nft) {
     contractsDir + '/addresses.js', JSON.parse(data)
 
   );
+
+  
   
 
 }

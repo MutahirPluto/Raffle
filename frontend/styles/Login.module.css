@@ -30,7 +30,9 @@
     background-color: rgb(14 165 233);
     color: white;
   }
-  
+  .logo{
+    cursor: pointer;
+  }
   .error {
     color: red;
     text-align: center;
@@ -38,9 +40,23 @@
     font-style: italic;
     margin: 5px;
   }
+  #nav{
+    max-height: 100px;
+    color: white;
+    flex: 0.3;
+    justify-content: space-between;
+    /* border: 1px solid red; */
+    margin: 0px auto;
+  }
+  .navLink{
+    /* border: 1px solid red; */
+    margin-top: 10px;
+    cursor: pointer;
+    margin-left: 30px;
+    font-weight: 500;
+  }
   
   .hrfef{
     color:"white" ;
-    /* border: 1px solid red; */
     margin-top: 10px;
   }

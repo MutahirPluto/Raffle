@@ -58,6 +58,7 @@ function MyApp({ Component, pageProps }) {
           {/* </Routes> */} 
           <Header />
            <Component {...pageProps} />
+           {/* <div>kk</div> */}
          </Web3ReactProvider>
       {/* </BrowserRouter> */}
       </div>

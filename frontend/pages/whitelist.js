@@ -14,9 +14,11 @@ import {injectedConnector} from "../utils/connectors"
 import styles from "../styles/Login.module.css"
 import { ethers, BigNumber } from 'ethers'
 import Link from 'next/link';
+import Web3Modal from 'web3modal'
 import { Container, Form, FormControl, Nav, Navbar, NavDropdown,  Modal } from "react-bootstrap";
-// import {parse} from "csv-parse/lib/sync"
-// const parse = require("csv-parse/lib/sync")
+import {nftPreSale_addr,nft_addr} from "../pages/contract/addresses"
+import NFTCrowdsale from "../pages/contract/NFTCrowdsale.json"
+import NFT from "../pages/contract/NFT.json"
 import readXlsxFile from 'read-excel-file'
 export default function WhiteList() {
 
@@ -32,8 +34,25 @@ export default function WhiteList() {
         active: networkActive, error: networkError, activate: activateNetwork
       } = useWeb3React();
 
+      const loadProvider = async () => {
+        try {
+            const web3Modal = new Web3Modal();
+            const connection = await web3Modal.connect();
+            const provider = new ethers.providers.Web3Provider(connection);
+            return provider.getSigner();
+        }
+        catch (e) {
+            console.log("loadProvider: ", e)
+            
+        }
+    }
 
-      function onKeyUp(event) {
+      const [addr, setAddr] = useState([])
+      const [checkWhiteList, setcheckWhiteList] = useState()
+      const [iswhitelist, setiswhitelist] = useState(false);
+
+
+    function onKeyUp(event) {
 
     if(event.target.files.length>0){
         let file = event.target.files[0];
@@ -47,42 +66,106 @@ export default function WhiteList() {
               }
               else{
                 console.log("i", i[1])
-                arr.push(i[1])
+                arr.push(ethers.utils.getAddress(i[1]))
               }
             }))
-
+            setAddr(arr)
             console.log("array>>", arr)
         })
-        // let whiteListTempArr = [];
-        // const reader = new window.FileReader();
-        // reader.readAsArrayBuffer(file);
-        // reader.onloadend = () => {
-        //     const records = parse(Buffer(reader.result), {
-        //         columns: false,
-        //         skip_empty_lines: true,
-        //     });
-        //     records.map((item)=>{
-        //         whiteListTempArr.push(ethers.utils.getAddress(item[0]))
-        //     })
-            
-        //     console.log("whiteListTempArr", whiteListTempArr)
-        // };
+    }
+    }
+
+    
+  // console.log("isWhiteList", iswhitelist)
+
+
+    const startSale = async () => {
+      try {
+        if(addr.length > 0){
+          let signer = await loadProvider()
+          let NFTCrowdsaleContract = new ethers.Contract(nftPreSale_addr, NFTCrowdsale, signer);
+          let startSale = await NFTCrowdsaleContract.startSale(addr, "0x901674Cb10e86ac943D3f09326Bd4c4E1c282103", nft_addr)
+          let tx = await startSale.wait()
+          let pre = await NFTCrowdsaleContract.pre()
+          console.log("tx", pre)
+        }
+          
+      } catch (e) {
+          console.log("error", e)
+      }
     }
 
 
+    const loadWhiteList = async () => {
+      try {
 
+          let signer = await loadProvider()
+          setiswhitelist(false)
+          let NFTCrowdsaleContract = new ethers.Contract(nftPreSale_addr, NFTCrowdsale, signer);
+          let _whitelist = await NFTCrowdsaleContract.whitelist(checkWhiteList)
+          console.log("isWhitelist", _whitelist)
+          setiswhitelist(_whitelist)
+      } catch (e) {
+          console.log("data", e)
+      }
     }
 
- 
+  //   useEffect(() => {
+  //     (async () => {
+  //         if (account) {
+  //             try {
+  //               loadWhiteList()
+
+  //             } catch (error) {
+  //                 console.log(error)
+  //             }
+  //         }
+  //     })()
+  // }, [account]);
+
+    console.log("setCheckWhiteList", checkWhiteList)
+    console.log("Arr>>", addr)
+
 
   return (
    <div>
-       <div>
        <Form.Control type="file" placeholder="Whitelist Addresses" onChange={(e)=>onKeyUp(e)} />
        <div>
-           jj
+          <button onClick={startSale} >Start Sale</button>
        </div>
+       {/* <div>
+          <button onClick={loadWhiteList} >Check WhiteList</button>
+       </div> */}
+
+        <div style={{textAlign:"center"}} >
+        <div  style={{marginTop:"1rem"}}>
+       <p className='whitelist'>
+              {
+                iswhitelist == true ? (
+
+                  <p className="green-head">WHITELISTED</p>
+                )
+                                        
+              : (<p className="red-head">Not WHITELISTED</p> )
+                                                    
+              }
+        </p>
        </div>
+       
+
+       <div>
+                        <Form.Group className="mb-3" controlId="formBasicPassword">
+                                    <Form.Control type="text" placeholder="Check WhiteList" 
+                                    onChange={(e) => 
+                                        setcheckWhiteList(e.target.value)  }  />
+                                          
+                                </Form.Group>
+
+                            
+                            <button className='custom-btn btn-white' onClick={loadWhiteList}>Check</button>
+       </div> 
+        </div>
+
    </div>
   );
 }

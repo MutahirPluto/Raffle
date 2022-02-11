@@ -214,24 +214,27 @@ function DashboardHeader(props) {
         }
 
 <Navbar  expand="lg" style={{backgroundColor:"#2C3E50"}} >
-    <Container >
+    <div class="container-fluid" >
+      <Link href="/">
+      <img className={styles.logo} src='https://hzpad.pluton.ltd/static/media/vector-logo.601d54a8.png'  height={80} />
+      </Link>
     <Navbar.Toggle aria-controls="navbarScroll" />
     <Navbar.Collapse id="navbarScroll">
       <Nav
         className="me-auto my-2 my-lg-0"
-        style={{ maxHeight: '100px', color:"white", flex:"0.3", justifyContent:"space-between"}}
+        // style={{ maxHeight: '100px', color:"white", flex:"0.3", justifyContent:"space-between", border:"1px solid red", margin:"0px auto"}}
         navbarScroll
-        
+        id={styles.nav}
       >
-        {/* <Link to="/">
-        <p  >Home</p>
-          </Link> */}
+          <Link href="/">
+        <p className={styles.navLink}  >Home</p>
+          </Link>
           <Link href="/whitelist">
-        <p  >WhiteList</p>
+        <p className={styles.navLink}  >Raffle</p>
           </Link>
       </Nav>
       
-      <Form className="d-flex">
+      <Form className="d-flex" >
          {
           //  networkError?<button type="button" className="btn-custom secondary-btn">Connect Wallet</button>:
            active && address ==  "1"
@@ -278,7 +281,7 @@ function DashboardHeader(props) {
          } */}
       </Form>
     </Navbar.Collapse>
-  </Container>
+  </div >
 </Navbar>
 
 

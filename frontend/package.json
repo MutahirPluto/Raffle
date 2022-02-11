@@ -30,6 +30,7 @@
     "react-moralis": "^1.1.0",
     "react-router-dom": "^6.2.1",
     "read-excel-file": "^5.2.26",
+    "web3modal": "^1.9.5",
     "xlsx": "^0.18.0"
   },
   "devDependencies": {

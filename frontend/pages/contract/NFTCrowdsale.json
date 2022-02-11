@@ -1,0 +1,15 @@
+[
+  "event OwnershipTransferred(address indexed,address indexed)",
+  "function Finalize() returns (bool)",
+  "function buyNFT() payable",
+  "function finalized() view returns (bool)",
+  "function maxGiveAway() view returns (uint256)",
+  "function owner() view returns (address)",
+  "function pre() view returns (bool)",
+  "function prePrice() view returns (uint256)",
+  "function renounceOwnership()",
+  "function startSale(address[],address,address)",
+  "function transferOwnership(address)",
+  "function whitelist(address) view returns (bool)",
+  "function whitelistCount() view returns (uint256)"
+]

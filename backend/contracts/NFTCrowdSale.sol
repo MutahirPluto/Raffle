@@ -23,6 +23,8 @@ contract NFTCrowdsale is Context, ReentrancyGuard,Ownable{
     address payable private _wallet;
     bool public finalized;
     bool public pre;
+    mapping(address => bool) private _whitelist;
+    uint256 public whitelistCount;
     
     NFT private nft;
     // address payable private _wallet;
@@ -32,7 +34,9 @@ contract NFTCrowdsale is Context, ReentrancyGuard,Ownable{
     mapping (address => uint256) purchase;
     mapping (address => uint256) msgValue;
 
-    
+    function whitelist(address account)public view returns(bool){
+        return _whitelist[account];
+    }
 
      function startSale(address[] memory accounts, address payable wallet ,address _nft) public onlyOwner {
         //NFT(_nft) req
@@ -49,12 +53,11 @@ contract NFTCrowdsale is Context, ReentrancyGuard,Ownable{
         }
     
     }
-    function _addPayee(address account) private {
+     function _addPayee(address account) private {
         require(account != address(0), "PaymentSplitter: account is the zero address");
-      
-       
+        _whitelist[account]=true;
+        whitelistCount++;
     }
-
    
  
     fallback () external payable {

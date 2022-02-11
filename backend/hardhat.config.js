@@ -4,6 +4,7 @@ require("@nomiclabs/hardhat-etherscan");
 require("@nomiclabs/hardhat-waffle");
 require("hardhat-gas-reporter");
 require("solidity-coverage");
+require('hardhat-abi-exporter');
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -15,6 +16,8 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   }
 });
 
+console.log("hello")
+
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 
@@ -24,6 +27,9 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 module.exports = {
   solidity: "0.8.4",
   networks: {
+    hardhat: {
+      chainId: 1337,
+    },
     ropsten: {
       url: process.env.ROPSTEN_URL || "",
       accounts:
@@ -36,5 +42,14 @@ module.exports = {
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
+  },
+  abiExporter: {
+    path: '../frontend/pages/contract',
+    runOnCompile: true,
+    clear: true,
+    only: [':NFT$', ':NFTCrowdsale$'],
+    flat: true,
+    spacing: 2,
+    pretty: true,
   },
 };
